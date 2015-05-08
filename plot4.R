@@ -1,15 +1,23 @@
 # plot 4
-#R script to filter the data into the dates required
+# setting my work directory
+setwd("ExData_Plotting1/")
 
-# define the name of the data
+#filter the data into the dates required
+# define the name of the data in zip
 zipfile="household_power_consumption.zip" 
+# define the name of data
 file="household_power_consumption.txt"
+# read the data direct of hte ZIP file
 data <- read.csv(unz(zipfile, file), sep=";", stringsAsFactors=FALSE)
-# we will use data from 2007-02-01 to 2007-02-02, we will filter the data
+# merge the date and time
 data$Date <- paste(data$Date, data$Time)
+#convert the date format
 data$Date=strptime(data$Date, "%d/%m/%Y %H:%M:%S")
+# we will use data from the specific  date
 data_fil <- subset(data, Date >= "2007-02-01" & Date <= "2007-02-03")
+#define the required columns
 numcols <- names(data_fil)[3:length(names(data))]
+#converting the columns to numbers
 data_fil[numcols] <- lapply(data_fil[numcols], as.numeric)
 
 # choosing the device
@@ -31,10 +39,8 @@ legend("topright", names(data_fil)[7:length(names(data_fil))],  horiz=FALSE, col
 # plot the 3 plot
 plot(data_fil$Date, data_fil$Voltage, col="black", main="", ylab="Voltage", type = "l", xlab="datetime")
 
-
 # plot the 4 plot
 plot(data_fil$Date, data_fil$Global_reactive_power, col="black", ylab="Global Reactive Power", type = "l", xlab="")
-
 
 dev.off()
 
